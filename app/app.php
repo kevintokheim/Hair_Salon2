@@ -39,11 +39,6 @@
     });
 
 
-    $app->get("/stylists/{id}", function($id) use ($app) {
-        $stylist = Stylist::find($id);
-        return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
-    });
-
 
     $app->get("/clients", function() use ($app) {
         $client = new Client($_POST['client_name']);
@@ -67,6 +62,15 @@
         return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
     });
 
+
+    $app->post("/clients", function() use ($app) {
+        $client_name = $_POST['client_name'];
+        $stylist_id = $_POST['stylist_id'];
+        $client = new Client($client_name, $id = null, $stylist_id);
+        $client->save();
+        $stylist = Stylist::find($stylist_id);
+        return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
+    });
 
     //Allows the user to delete the list of stylists on the front page
     $app->post("/delete_stylists", function() use ($app) {
