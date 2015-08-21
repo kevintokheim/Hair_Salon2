@@ -32,14 +32,14 @@
 
             $client_name = "Joe";
             $stylist_id = $test_stylist->getId();
-            $test_client = new Client($client_name, $id, $stylist_id)
+            $test_client = new Client($client_name, $id, $stylist_id);
 
             //Act
             $test_client->save();
 
             //Assert
             $result = Client::getAll();
-            $this->assertEquals($test_client, result[0]);
+            $this->assertEquals($test_client, $result[0]);
         }
 
         function test_getAll()

@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Hair Salon Client List</title>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
+    </head>
+    <body>
+        <div class = "container">
+            {% if clients is not empty %}
+                <h3>Add a client here!</h3>
+                <ul>
+                    {% for client in clients %}
+                        <li><a href = "/clients">{{ client.getClientName }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+
+            <form action = '/clients' method = 'post'>
+                <label for = 'client_name'>Client Name</label>
+                <input id = 'client_name' name = 'client_name' type = 'text'>
+
+                <button type = 'submit'>Add a client!</button>
+            </form>
+            <!-- <form action = 'client_stylists' method = 'post'>
+                <button type = 'submit'>Clear</button>
+            </form> -->
+
+        </div>
+    </body>
+</html>

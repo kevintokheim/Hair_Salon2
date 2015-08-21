@@ -2,7 +2,7 @@
 
     require_once __DIR__."/../vendor/autoload.php";
     require_once __DIR__."/../src/Stylist.php";
-    //require_once __DIR__."/../src/Client.php";
+    require_once __DIR__."/../src/Client.php";
 
     use Symfony\Component\Debug\Debug;
     Debug::enable();
@@ -21,22 +21,54 @@
         'twig.path' => __DIR__.'/../views'
     ));
 
+    //renders the front page (index) where the user can view and add stylists
     $app->get("/", function() use ($app) {
-        return $app['twig']->render('index.html.twig');
+        return $app['twig']->render('index.html.twig', array('stylists' => Stylist::getAll()));
     });
 
+
+    //renders the clients page where the user can see the list of clients
+    $app->get("/clients", function() use ($app) {
+        return $app['twig']->render('clients.html.twig', array('clients' => Client::getAll()));
+    });
+
+
+    //page that is rendered when the user adds a stylist
     $app->get("/stylists", function() use ($app) {
         return $app['twig']->render('stylists.html.twig', array('stylists' => Stylist::getAll()));
     });
 
-    //$app->get("/clients")
 
+    $app->get("/stylists/{id}", function($id) use ($app) {
+        $stylist = Stylist::find($id);
+        return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
+    });
+
+
+    $app->get("/clients", function() use ($app) {
+        $client = new Client($_POST['client_name']);
+        $client->save();
+        return $app['twig']->render('clients.html.twig', array('clients' => Client::getAll()));
+    });
+
+
+
+
+    //Allows the user to add stylists to the list on the front page
     $app->post("/stylists", function() use ($app){
         $stylist = new Stylist($_POST['stylist_name']);
         $stylist->save();
-        return $app['twig']->render('stylists.html.twig', array('stylists' => Stylist::getAll()));
+        return $app['twig']->render('index.html.twig', array('stylists' => Stylist::getAll()));
     });
 
+
+    $app->get("/stylists/{id}", function($id) use ($app) {
+        $stylist = Stylist::find($id);
+        return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
+    });
+
+
+    //Allows the user to delete the list of stylists on the front page
     $app->post("/delete_stylists", function() use ($app) {
         Stylist::deleteAll();
         return $app['twig']->render('index.html.twig');
