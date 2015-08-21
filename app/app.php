@@ -17,14 +17,21 @@
     $DB = new PDO($server, $username, $password);
 
 
+    use Symfony\Component\HttpFoundation\Request;
+    Request::enableHttpMethodParameterOverride();
+
+
     $app->register(new Silex\Provider\TwigServiceProvider(), array(
         'twig.path' => __DIR__.'/../views'
     ));
+
+
 
     //renders the front page (index) where the user can view and add stylists
     $app->get("/", function() use ($app) {
         return $app['twig']->render('index.html.twig', array('stylists' => Stylist::getAll()));
     });
+
 
 
     //renders the clients page where the user can see the list of clients
@@ -33,10 +40,12 @@
     });
 
 
+
     //page that is rendered when the user adds a stylist
     $app->get("/stylists", function() use ($app) {
         return $app['twig']->render('stylists.html.twig', array('stylists' => Stylist::getAll()));
     });
+
 
 
 
@@ -57,10 +66,13 @@
     });
 
 
+
+
     $app->get("/stylists/{id}", function($id) use ($app) {
         $stylist = Stylist::find($id);
         return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
     });
+
 
 
     $app->post("/clients", function() use ($app) {
@@ -72,11 +84,51 @@
         return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
     });
 
+
+
     //Allows the user to delete the list of stylists on the front page
     $app->post("/delete_stylists", function() use ($app) {
         Stylist::deleteAll();
-        return $app['twig']->render('index.html.twig');
+        return $app['twig']->render('stylists.html.twig');
     });
+
+
+    //route which allows the user to edit one stylist
+    $app->get("/stylists/{id}/edit", function($id) use ($app) {
+        $stylist = Stylist::find($id);
+        return $app['twig']->render('stylist_edit.html.twig', array('stylist' => $stylist));
+    });
+
+
+    //allows the user to use the update method
+    $app->patch("/stylists/{id}", function($id) use ($app) {
+        $stylist_name = $_POST['stylist_name'];
+        $stylist = Stylist::find($id);
+        $stylist->update($stylist_name);
+        return $app['twig']->render('stylist.html.twig', array('stylist' => $stylist, 'clients' => $stylist->getClients()));
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return $app;
 ?>
