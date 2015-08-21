@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>restaraunt</title>
+    </head>
+    <body>
+        <h1>{{ client.getClientName }}</h1>
+
+
+
+        <p>Update this client</p>
+        <form action="/clients/{{ client.getId }}" method="post">
+            <input name="_method" type="hidden" value="patch">
+
+            <label for='client_name'>client name</label>
+            <input id='client_name' name='client_name' type='text'>
+
+
+            <button type='submit'>Change this client</button>
+        </form>
+
+        <form action="/clients/{{ client.getId }}" method="post">
+            <input name="_method" type="hidden" value="delete">
+
+            <button type="submit">Delete this client</button>
+        </form>
+
+        <p><a href='/'>Home</a></p>
+    </body>
+</html>

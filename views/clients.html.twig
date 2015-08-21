@@ -9,7 +9,7 @@
                 <h3>Add a client here!</h3>
                 <ul>
                     {% for client in clients %}
-                        <li><a href = "/clients">{{ client.getClientName }}</li>
+                        <li><a href = "/clients/{{ client.getId }}">{{ client.getClientName }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}

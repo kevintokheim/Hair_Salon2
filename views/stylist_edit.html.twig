@@ -17,8 +17,10 @@
             </form>
 
             <form action = "/stylists/{{ stylist.getId }}" method = "post">
-                
+                <input name = "_method" type = "hidden" value = "delete">
 
+                <button type = "submit">Delete this stylist from the list</button>
+            </form>
         </div>
     </body>
 </html>
